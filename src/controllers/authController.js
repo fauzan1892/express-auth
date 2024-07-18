@@ -1,3 +1,4 @@
+const { JWT_TOKEN } = require('../constant/authConstant');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
@@ -25,7 +26,7 @@ exports.register = (req, res) => {
                 message: err.message || "Some error occurred while creating the User."
             });
         } else {
-            const token = jwt.sign({ id: data.id }, 'your_jwt_secret', { expiresIn: '24h' });
+            const token = jwt.sign({ id: data.id }, JWT_TOKEN, { expiresIn: '24h' });
             res.send({ auth: true, token: token });
         }
     });
@@ -34,7 +35,7 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
     const { email, password } = req.body;
 
-    console.log(req.body);  // Tambahkan log ini untuk debugging
+    // console.log(req.body);  // Tambahkan log ini untuk debugging
 
     if (!email || !password) {
         return res.status(400).send({ message: "Content can not be empty!" });
@@ -55,9 +56,14 @@ exports.login = (req, res) => {
             });
         }
 
-        const token = jwt.sign({ id: user.id }, 'yzlp8NxY_Rwkz1o6hIgC_MPIifPL', { expiresIn: '24h' });
+        const token = jwt.sign({ id: user.id }, JWT_TOKEN, { expiresIn: '24h' });
 
-        res.status(200).send({ auth: true, token: token });
+        res.status(200).send({ auth: true, 
+            id : user.id,
+            username : user.username,
+            email : user.email,
+            token: token 
+        });
     });
 };
 

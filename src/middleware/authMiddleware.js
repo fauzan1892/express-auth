@@ -1,3 +1,4 @@
+const { JWT_TOKEN } = require('../constant/authConstant');
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
@@ -10,7 +11,7 @@ const verifyToken = (req, res, next) => {
         });
     }
 
-    jwt.verify(token, 'yzlp8NxY_Rwkz1o6hIgC_MPIifPL', (err, decoded) => {
+    jwt.verify(token, JWT_TOKEN, (err, decoded) => {
         if (err) {
             return res.status(500).send({
                 auth: false,
